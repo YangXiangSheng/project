@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MaikeDun.dao.StaffsDao">
+	<!-- 根据id查询一个用户信息 -->
+	<select id="selectStaffById" parameterType="Integer" 
+		resultType="com.MaikeDun.bean.Staffs">
+		select * from staffs where staffId = #{staffId}
+	</select>
+	<select id="selectStaff" resultType="com.MaikeDun.bean.Staffs">
+	select * from staffs order by staffId
+	</select>
+	<!-- 录入员工信息-->
+	<insert id="addStaff" parameterType="com.MaikeDun.bean.Staffs">
+		insert into staffs (staffId,staffName,sex,phone,email,idcard,photo,department,position) values(#{staffId},#{staffName},#{sex},#{phone},#{email},#{idcard},#{photo},#{department},#{position})	
+	</insert>
+	<!-- 修改一个员工 信息-->
+	<update id="updateStaff" parameterType="com.MaikeDun.bean.UpdateStaff">
+		update staffs set staffId=#{staffNewId},staffName = #{staffName},sex = #{sex},phone=#{phone},email=#{email},idcard=#{idcard},department=#{department},position=#{position} where staffId = #{staffOldId}
+	</update>
+	<!-- 修改一个员工 照片-->
+	<update id="updateStaffPhoto" parameterType="com.MaikeDun.bean.Staffs">
+		update staffs set photo=#{photo} where staffId = #{staffId}
+	</update>
+	<!-- 删除一个员工 -->
+	<delete id="deleteStaff" parameterType="Integer"> 
+		delete from staffs where staffId = #{staffId}
+	</delete>
+</mapper>

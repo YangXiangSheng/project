@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.MaikeDun.dao.UserDao">
+<!-- 登录注册 -->
+	<insert id="add" parameterType="com.MaikeDun.bean.Staff">
+		insert into staff(id,name,password,sex,email,phone,idcard,flag,img) values(#{id},#{name},#{password},#{sex},#{email},#{phone},#{idcard},#{flag},#{photo})
+	</insert>
+	<select id="select" resultType="com.MaikeDun.bean.Staff">
+		select * from staff where idcard= #{name} or id = #{name}
+	</select>
+	<select id="selectcode" resultType="com.MaikeDun.bean.InviteCode">
+		select * from code where code = #{code}
+	</select>
+<!-- 账号信息修改 -->
+	<update id="updatestaffpwd" parameterType="com.MaikeDun.bean.Staff">
+		update staff set password = #{password} where id = #{id}
+	</update>
+	<update id="updatestaffmessage" parameterType="com.MaikeDun.bean.Staff">
+		update staff set email = #{email},phone = #{phone},address = #{address},QQ=#{QQ} where id = #{id}
+	</update>
+	<update id="updatestaffimg" parameterType="com.MaikeDun.bean.Staff">
+		update staff set img=#{img} where id = #{id}
+	</update>
+<!-- 产品 -->
+	<insert id="addshop" parameterType="com.MaikeDun.bean.Shop" >
+		insert into shop(s_id,s_name,number,price) values(#{id},#{name},#{number},#{price})
+	</insert>
+	<select id="selectAllShop" resultType="com.MaikeDun.bean.Shop">
+		select * from shop order by s_id
+	</select>
+	<select id="selectShopByName" resultType="com.MaikeDun.bean.Shop">
+		select * from shop where s_id like CONCAT('%',#{name},'%') or s_name like CONCAT('%',#{name},'%')  order by s_id
+	</select>
+	<select id="selectShopById" resultType="com.MaikeDun.bean.Shop">
+		select * from shop where s_id = #{s_id}
+	</select>
+		<select id="selectShopById1" parameterType="string" resultType="com.MaikeDun.bean.Shop">
+		select * from shop where s_id = #{s_id}
+	</select>
+	<delete id="deleteshop" parameterType="com.MaikeDun.bean.Shop"> 
+		delete from shop where s_id =#{s_id}
+	</delete>
+	<update id="updateshop" parameterType="com.MaikeDun.bean.Shop">
+		update shop set s_id = #{s_id},s_name = #{s_name},number = #{number},price=#{price} where s_id = #{s_id}
+	</update>
+<!-- 生产产品 -->
+	<select id="selectAllShopPro" resultType="com.MaikeDun.bean.ShopProduct">
+		select * from shop_product order by id desc
+	</select>
+	<select id="selectShopByNameProduct" resultType="com.MaikeDun.bean.ShopProduct">
+		select * from shop_product where s_id like CONCAT('%',#{name},'%') or s_name like CONCAT('%',#{name},'%')  order by id desc
+	</select>
+	<insert id="addshopproduct" parameterType="com.MaikeDun.bean.ShopProduct" >
+		insert into shop_product(s_id,s_name,number,date) values(#{id},#{name},#{number},#{date})
+	</insert>
+	<update id="updateshopproduct" parameterType="com.MaikeDun.bean.ShopProduct">
+		update shop_product set s_id = #{s_id},s_name = #{s_name},number = #{number},date=#{date} where id = #{id}
+	</update>
+	<delete id="deleteshopproduct" parameterType="com.MaikeDun.bean.ShopProduct"> 
+		delete from shop_product where id =#{id}
+	</delete>
+	<update id="product_update_shop" parameterType="com.MaikeDun.bean.Shop">
+		update shop set number = number + #{number} where s_id = #{s_id}
+	</update>
+	<update id="product_delete_shop" parameterType="com.MaikeDun.bean.Shop">
+		update shop set number = number - #{number} where s_id = #{s_id}
+	</update>
+<!-- 销售产品 -->
+	<select id="selectAllShopSale" resultType="com.MaikeDun.bean.ShopSale">
+		select * from shop_sale order by id desc
+	</select>
+	<select id="selectShopByNameSale" resultType="com.MaikeDun.bean.ShopSale">
+		select * from shop_sale where s_id like CONCAT('%',#{name},'%') or s_name like CONCAT('%',#{name},'%')  order by id desc
+	</select>
+	<insert id="addshopsale" parameterType="com.MaikeDun.bean.ShopSale" >
+		insert into shop_sale(s_id,s_name,number,date) values(#{id},#{name},#{number},#{date})
+	</insert>
+	<update id="updateshopsale" parameterType="com.MaikeDun.bean.ShopSale">
+		update shop_sale set s_id = #{s_id},s_name = #{s_name},number = #{number},date=#{date} where id = #{id}
+	</update>
+	<delete id="deleteshopsale" parameterType="com.MaikeDun.bean.ShopSale"> 
+		delete from shop_sale where id=#{id}
+	</delete>
+	<update id="sale_update_shop" parameterType="com.MaikeDun.bean.Shop">
+		update shop set number = number - #{number} where s_id = #{s_id}
+	</update>
+	<update id="sale_delete_shop" parameterType="com.MaikeDun.bean.Shop">
+		update shop set number = number + #{number} where s_id = #{s_id}
+	</update>
+<!-- 订单 -->
+	<select id="selectAllOrder" resultType="com.MaikeDun.bean.Order">
+		select * from order_shop order by o_id desc
+	</select>
+	<select id="selectAllOrderByName" resultType="com.MaikeDun.bean.Order">
+		select * from order_shop where s_id like CONCAT('%',#{name},'%') or c_id like CONCAT('%',#{name},'%')  order by o_id desc
+	</select>
+	<insert id="addorder" parameterType="com.MaikeDun.bean.Order" >
+		insert into order_shop(s_id,o_number,o_time,photo,c_id,flag) values(#{s_id},#{o_number},#{o_time},#{photo},#{c_id},#{flag})
+	</insert>
+	<delete id="deleteorder" parameterType="com.MaikeDun.bean.Order">
+		delete from order_shop where o_id=#{o_id}
+	</delete>
+	<update id="updateorder" parameterType="com.MaikeDun.bean.Order">
+		update order_shop set s_id = #{s_id},o_number = #{o_number},o_time=#{o_time},photo=#{photo} where o_id = #{o_id}
+	</update>
+	<update id="updateorderflag" parameterType="com.MaikeDun.bean.Order">
+		update order_shop set publish_time=#{publish_time},flag = 1 where o_id = #{o_id}
+	</update>
+<!-- 客户 -->
+	<select id="selectAllClient" resultType="com.MaikeDun.bean.Client">
+		select * from client order by c_id desc
+	</select>
+	<select id="selectAllClientByName" resultType="com.MaikeDun.bean.Client">
+		select * from client where c_id like CONCAT('%',#{name},'%') or c_name like CONCAT('%',#{name},'%')  order by c_id desc
+	</select>
+	<insert id="addclient" parameterType="com.MaikeDun.bean.Client" >
+		insert into client(c_id,c_name,phone,address) values(#{c_id},#{c_name},#{phone},#{address})
+	</insert>
+	<delete id="deleteclient" parameterType="com.MaikeDun.bean.Client">
+		delete from client where c_id=#{c_id}
+	</delete>
+	<update id="updateclient" parameterType="com.MaikeDun.bean.Client">
+		update client set c_id = #{c_id},c_name = #{c_name},phone=#{phone},address=#{address} where c_id = #{c_id}
+	</update>
+<!-- 购买 -->
+	<select id="selectAllBuy" resultType="com.MaikeDun.bean.Buy">
+		select * from buy order by id desc
+	</select>
+	<select id="selectBuyByName" resultType="com.MaikeDun.bean.Buy">
+		select * from buy where b_id like CONCAT('%',#{name},'%') or b_name like CONCAT('%',#{name},'%')  order by id desc
+	</select>	
+	<insert id="addbuy" parameterType="com.MaikeDun.bean.Buy" >
+		insert into buy(b_id,b_name,number,price,date) values(#{b_id},#{b_name},#{number},#{price},#{date})
+	</insert>
+	<delete id="deletebuy" parameterType="com.MaikeDun.bean.Buy">
+		delete from buy where id=#{id}
+	</delete>
+	<update id="updatebuy" parameterType="com.MaikeDun.bean.Buy">
+		update buy set b_id = #{b_id},b_name = #{b_name},number=#{number},price=#{price},date=#{date} where id = #{id}
+	</update>	
+</mapper>

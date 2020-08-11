@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MaikeDun.dao.AchievementDao">
+	<!-- 根据id查询一个用户信息 -->
+	<select id="selectAchievementByDate" parameterType="Date" 
+		resultType="com.MaikeDun.bean.Achievement">
+		select * from achievement where date = #{date}
+	</select>
+	<select id="selectAchievement" resultType="com.MaikeDun.bean.Achievement">
+	select * from achievement order by date
+	</select>
+	<!-- 查询一个月的收入 -->
+	<select id="countAchievement" resultType="com.MaikeDun.bean.CountAchievement">
+	select cast(sum(turnover) AS decimal(15,2)) as turnover,month(date) as month,year(date) as year from achievement where 1=1
+	<if test="month!=null">and month(date)=#{month}</if> <if test="year!=null"> and year(date)=#{year} </if>
+	</select>
+		<!-- 查询一记录条数 -->
+	<select id="SelectAchievementcount" resultType="com.MaikeDun.bean.CountAchievement">
+	select * from achievement where 1=1
+	<if test="month!=null">and month(date)=#{month}</if> <if test="year!=null"> and year(date)=#{year} </if>
+	</select>
+	<!-- 录入收入信息-->
+	<insert id="addAchievement" parameterType="com.MaikeDun.bean.Achievement">
+		insert into achievement (date,turnover,information) values(#{date},#{turnover},#{information})
+		</insert>
+		<!-- 录入收入信息2-->
+	<insert id="addAchievementByAuto" parameterType="com.MaikeDun.bean.Achievement">
+		insert into achievement (date,turnover,information) values(#{date},#{turnover},Null)
+		</insert>
+	<!-- 修改收入信息-->
+	<update id="updateAchievement" parameterType="com.MaikeDun.bean.Achievement">
+		update achievement set turnover=#{turnover},information = #{information} where date = #{date}
+	</update>
+	<!-- 修改收入信息-->
+	<update id="updateAchievementByAuto" parameterType="com.MaikeDun.bean.Achievement">
+		update achievement set turnover=#{turnover} where date = #{date}
+	</update>
+	<!-- 删除收入信息 -->
+	<delete id="deleteAchievement" parameterType="Date"> 
+		delete from achievement where date = #{date}
+	</delete>
+	<!-- 查询销售记录 -->
+	<select id="selectShopSaleByDate" parameterType="string" resultType="com.MaikeDun.bean.ShopSale">
+	select * from shop_sale where date=#{date}
+	</select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.MaikeDun.dao.ExpendDao">
+	<!-- 根据date查询一天的支出 -->
+	<select id="selectExpendByDate" parameterType="Date" 
+		resultType="com.MaikeDun.bean.Expend">
+		select * from expend where date = #{date}
+	</select>
+	<select id="selectExpendByDatestr" parameterType="String" 
+		resultType="com.MaikeDun.bean.Expend">
+		select expenditure from expend where date = #{date}
+	</select>
+	<select id="selectExpend" resultType="com.MaikeDun.bean.Expend">
+	select * from expend order by date
+	</select>
+	<!-- 查询一个月的支出 -->
+	<select id="countExpend" resultType="com.MaikeDun.bean.CountExpend">
+	select cast(sum(expenditure) AS decimal(15,2)) as expenditure,month(date) as month,year(date) as year from expend where 1=1
+	<if test="month!=null">and month(date)=#{month}</if> <if test="year!=null"> and year(date)=#{year} </if>
+	</select>
+		<!-- 查询一记录条数 -->
+	<select id="SelectExpendcount" resultType="com.MaikeDun.bean.CountExpend">
+	select * from expend where 1=1
+	<if test="month!=null">and month(date)=#{month}</if> <if test="year!=null"> and year(date)=#{year} </if>
+	</select>
+	<!-- 录入支出信息-->
+	<insert id="addExpend" parameterType="com.MaikeDun.bean.Expend">
+		insert into expend (date,expenditure,information) values(#{date},#{expenditure},#{information})
+		</insert>
+	<!-- 修改支出信息-->
+	<update id="updateExpend" parameterType="com.MaikeDun.bean.Expend">
+		update expend set expenditure=#{expenditure},information = #{information} where date = #{date}
+	</update>
+	<!-- 删除支出信息 -->
+	<delete id="deleteExpend" parameterType="Date"> 
+		delete from expend where date = #{date}
+	</delete>
+</mapper>
